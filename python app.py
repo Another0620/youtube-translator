@@ -4,6 +4,12 @@ from googletrans import Translator
 
 app = Flask(__name__)
 
+# 根路由，讓 Vercel 不會 404
+@app.route("/", methods=["GET"])
+def index():
+    return "✅ Vercel 部署成功！Flask 正在運作中！"
+
+# 抓字幕 + 翻譯 API
 @app.route("/transcript", methods=["POST"])
 def get_transcript():
     data = request.get_json()
@@ -18,6 +24,3 @@ def get_transcript():
     translation = translator.translate(text, dest='zh-tw')
 
     return jsonify({"transcript": translation.text})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
